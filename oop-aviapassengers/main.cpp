@@ -13,9 +13,18 @@ struct GeoObject {
 };
 struct DateTime
 {
-    int year;
-    int month;
     int day;
+    int month;
+    int year;
+    public:
+        std::string getFormatted() {
+            std::string formattedDate;
+            formattedDate += this->day > 0 && this->day <= 9 ? "0" + std::to_string(this->day) : std::to_string(this->day);
+            formattedDate += "-" + (this->month > 0 && this->month <= 9 ? "0" + std::to_string(this->month) : std::to_string(this->month));
+            formattedDate += "-" + (this->year >= 0 && this->year <= 99 ? "20" + std::to_string(this->year) : std::to_string(this->year));
+
+            return formattedDate;
+        }
 };
 struct Passenger
 {
@@ -59,8 +68,6 @@ class Menu {
             std::cout << "Введите город назначения" << std::endl;
             scanf_s("%s", input, 21);
             GeoObject passengerCity = {GeoType::CITY, input};
-            //passengerCity.type = GeoType::CITY;
-            //passengerCity.name = input;
             newPassenger.destination_city = passengerCity;
             std::cout << "Введите код или название авиакомпании" << std::endl;
             scanf_s("%s", input, 21);
@@ -184,7 +191,6 @@ class Menu {
             if (this->columnWidth < 5) {
                 this->columnWidth = 20;
             }
-            std::string test;
             std::cout << std::left;
             std::cout
                 << std::setw(this->columnWidth) << "[id]"
@@ -195,7 +201,7 @@ class Menu {
                 << std::setw(this->columnWidth) << "[flight]"
                 << std::setw(this->columnWidth) << "[departure date]"
                 << '\n';
-            for (const Passenger& i : this->passengers) {
+            for (Passenger& i : this->passengers) {
                 std::cout << std::left;
                 std::cout
                     << std::setw(this->columnWidth) << i.id
@@ -204,7 +210,7 @@ class Menu {
                     << std::setw(this->columnWidth) << i.destination_city.name
                     << std::setw(this->columnWidth) << i.airline_code
                     << std::setw(this->columnWidth) << i.flight_number
-                    << std::setw(this->columnWidth) << std::to_string(i.departure_date.day) << "-" << std::to_string(i.departure_date.month) << "-" << std::to_string(i.departure_date.year)
+                    << std::setw(this->columnWidth) << i.departure_date.getFormatted()
                     << '\n';
             }
 
